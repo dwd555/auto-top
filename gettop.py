@@ -6,7 +6,7 @@
 import re
 import xlwt
 import json
-with open("./test.txt","r") as fi:
+with open("./setting.txt","r") as fi:
 	setting=json.loads(fi.read())
 workbook = xlwt.Workbook()
 def logfile(loc):
@@ -20,7 +20,7 @@ def writeXls(process,log,index):#1、进程名，2、日志信息，3、下标
 	for i,j in enumerate(result):
 		result[i]=re.split(r'\s+', result[i])
 		try:
-			if "m" in result[i][index]:
+			if "m" in result[i][index]:#查看获取的数据有没有带单位，有的话去掉再添加，没有的除以1000使单位相同
 				res.append(re.findall(r'\d+',result[i][index])[0])
 			else:
 				num=float(re.findall(r'\d+',result[i][index])[0])
