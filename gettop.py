@@ -15,7 +15,7 @@ def logfile(loc):
 		return log
 
 def writeXls(process,log,index):#1、进程名，2、日志信息，3、下标
-	result=re.findall('.*'+process+'.*', log)
+	result=re.findall('.*'+process+'$.*', log)
 	res=[]
 	for i,j in enumerate(result):
 		result[i]=re.split(r'\s+', result[i])
@@ -40,31 +40,36 @@ def getIndex(info,log):#获取RES(自行定义)的下标
 
 
 def writeData(process,log,index,full,sheet):#1、写入数据，2、日志，3、需要查看的信息，4、是否全输出
-	for c,p in enumerate(process):#c是下标，p是进程名
+	xlsIndex=0
+	for p in enumerate(process):#c是下标，p是进程名
 		if exist(p,log):
 			res=writeXls(p, log,index)#result为进程的列表
 			if full:
-				sheet.write(0,c,p)
+				sheet.write(0,xlsIndex,p)
 				for i,j in enumerate(res):
-					sheet.write(i+1,c,float(j))
+					sheet.write(i+1,xlsIndex,float(j))
+				xlsIndex=xlsIndex+1
 			else:
 				if int(res[-1])-int(res[0])>0:#判断最后一个比最前一个大，才写入,去掉注释的话输出全部
-					sheet.write(0,c,p)
+					sheet.write(0,xlsIndex,p)
 					for i,j in enumerate(res):
-						sheet.write(i+1,c,float(j))
+						sheet.write(i+1,xlsIndex,float(j))
+					xlsIndex=xlsIndex+1
 
 def createXls(sheetName):
 	return workbook.add_sheet(sheetName,cell_overwrite_ok=True)
 
 def main(file,port,xls,arg,full):#file:读取的日志文件；port：选择atom还是arm,或者只查看单独一个程序；xls：选择保存的路径；arg：需要查看的top信息;full:是否全部输出
-	atom=["T_STBSSMain","t.ngod.core","T.STB.CDS","T.CAS.Nagra","T.STB.SIPSI","bstm_resmgr","T.STB.ES","mysqld","t.ngod.ss",\
-	"T.STB.PS","bstm_SWUPMain","main","bstm_plugin_wai","wb_s","CASManager","T.STB.MD","PssuMain","LAN.MD","T.STB.Carousel","T.STB.Signal",\
-	"ntpd","tvview","http_agent.plug","p.sysctrl","eventservice","NonIGD.MD","T.CAS.Main","T.STB.Main","ppu1server","ygserver",\
-	"tvview.plugin","CfgFileMailBox"]
+	atom=["T_STBSSMain","t.ngod.core","T.STB.CDS","T.CAS.Nagra","T.STB.SIPSI","bstm_resmgr","T.STB.ES","t.ngod.ss",\
+	"T.STB.PS","bstm_SWUPMain","bstm_plugin_wai","wb_s","CASManager","T.STB.MD","PssuMain","LAN.MD","T.STB.Carousel","T.STB.Signal",\
+	"ntpd","http_agent.plug","p.sysctrl","eventservice","NonIGD.MD","T.CAS.Main","T.STB.Main","ppu1server","ygserver",\
+	"CfgFileMailBox","java"]
 	arm=["dim-main","p.sysctrlAgent","lan.md.agent","WAN.eRouter","WAN.eSTB","upnpd","WAN.eMTA",\
 	"CMV_Check","snmp_agent_cm","miniupnpd","dmg_provisionin","gw_snmp_agent","dispatcher","docsis_mac_mana","dmg_provisionin","psm"]
-	
+	#部分容易引起歧义的已经去除，需要可自己增加
+	#"main","mysqld","tvview","tvview.plugin","LAN.MPEG"
 	print("计算中,请稍后")
+	# print(full)
 	Process=[]
 	if port=="atom":
 		Process=atom
@@ -83,7 +88,7 @@ def main(file,port,xls,arg,full):#file:读取的日志文件；port：选择atom
 #运行
 if __name__ == '__main__':
 	try:
-		main(setting["filename"],setting["progress"],'./result.xls',setting["arg"],bool(setting["full"]))
+		main(setting["filename"],setting["progress"],'./resResult.xls',setting["arg"],bool(setting["full"]))
 	except Exception as e:
 		print(e)
 

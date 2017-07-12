@@ -1,6 +1,7 @@
 {
-    "filename": "d:/192.168.1.202_05-07 00;00;00.log",
-    "progress": "t.ngod.core",
-    "arg": "VSZ",
-    "full": "True"
+    "filename": "./build62-sn895-4-30p-4k-top-1.log",
+    "progress": "atom",
+    "arg": "%CPU",
+    "full": 1,
+    "danwei": 0
 }

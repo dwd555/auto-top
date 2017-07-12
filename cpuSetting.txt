@@ -1,0 +1,7 @@
+{
+    "filename": "./build62-sn895-4-30p-4k-top-1.log",
+    "progress": "atom",
+    "arg": "%CPU",
+    "full": 0,
+    "danwei": 0
+}
